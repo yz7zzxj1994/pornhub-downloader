@@ -32,6 +32,6 @@ def random_header():
         'Mozilla/5.0 (MeeGo; NokiaN9) AppleWebKit/534.13 (KHTML, like Gecko) NokiaBrowser/8.5.0 Mobile Safari/534.13',
     ]
     return {
-        'cookie': "bs=kkfbi66h9zevjeq5bt27j0rvno182xdl; ss=205462885846193616; ua=237aa6249591b6a7ad6962bc73492c77; platform_cookie_reset=pc; platform=pc; il=v1BXlaGZlYXVdUf7NUmagIFHHrF7cqJTyjsJQsXcKmvQwxNTg5NjEyMjE5S2VVaWhMbzVrNUlpd1hrM0gzUFJVUFFIYlBqWVBDbmxfYnVzTDFQeA..; expiredEnterModalShown=1; RNLBSERVERID=ded6277; trending_search=ipx072",
+        'cookie': "ua=237aa6249591b6a7ad6962bc73492c77; platform_cookie_reset=pc; platform=pc; bs=kkfbi66h9zevjeq5bt27j0rvno182xdl; ss=205462885846193616; RNLBSERVERID=ded6699",
         'user-agent': random.choice(headers_list)
     }
