@@ -16,9 +16,9 @@
   
     cookie 默认使用空用户的cookie,可自行替换自己的账号cookie,作用:使用账号的cookie可以保存浏览记录 观看记录
 
-2.pornhub多线程断点续传版.py 为核心类
+2.pornhub.py 为核心类
   
-    配置好config.py后,运行pornhub多线程断点续传版.py即可进行下载
+    配置好config.py后,运行pornhub.py即可进行下载
 
 
 3.下载过程需要翻墙且为全局!!!
