@@ -8,6 +8,7 @@ download_urls = [
     "https://cn.pornhub.com/view_video.php?viewkey=ph5e26a9c4dc4d2",
     "https://cn.pornhub.com/view_video.php?viewkey=ph5e26b33e5fc1b",
 
+    # ~星にお願い
     "https://cn.pornhub.com/view_video.php?viewkey=ph5e34f72674af7",
 
     # 小胖丁
@@ -17,11 +18,23 @@ download_urls = [
     "https://cn.pornhub.com/view_video.php?viewkey=ph5e02113017593",
     "https://cn.pornhub.com/view_video.php?viewkey=ph5e31a3081a442",
 
-    # 其他
-    "https://cn.pornhub.com/view_video.php?viewkey=ph5e20642b1001a",
+    # FC2PPV-778927 ことり19歳Icup
+    "https://cn.pornhub.com/view_video.php?viewkey=ph5e492f9126b4e",
+    "https://cn.pornhub.com/view_video.php?viewkey=ph5e492f9149423",
+
+    # 小嶋ひより
+    "https://cn.pornhub.com/view_video.php?viewkey=ph5de6570431fd0",
+    # FC2PPV-1261799
+    "https://cn.pornhub.com/view_video.php?viewkey=ph5e5271e68415b",
+    # FC2PPV 1288053
+    "https://cn.pornhub.com/view_video.php?viewkey=ph5e5e7756b90d4",
 ]
 
 down_path = "D:/ph/other"
+
+# 批量下载链接
+batch_url = "https://cn.pornhub.com/channels/ours-hd-tv/videos?o=vi"
+batch_down_path = "D:/ph/batch"
 
 
 # 随机请求头

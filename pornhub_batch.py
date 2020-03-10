@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-import os
 import re
+import os
 import time
+import random
 import requests
+from lxml import etree
 from tqdm import tqdm
 from queue import Queue
 from retrying import retry
 from threading import Thread
-from config import random_header, download_urls, down_path
+from config import random_header, batch_url, batch_down_path
 
 
 class Pornhub(Thread):
@@ -15,7 +17,7 @@ class Pornhub(Thread):
         Thread.__init__(self)
         self.queue = queue
         # 下载路径
-        self.rootpath = down_path + "/"
+        self.rootpath = batch_down_path + "/"
 
     # 解析视频页面
     @retry(stop_max_attempt_number=15)
@@ -113,21 +115,43 @@ class Pornhub(Thread):
             self.queue.task_done()
 
 
+video_list = []
+
+
+# 解析视频页面链接
+@retry(stop_max_attempt_number=9999)
+def parse_batch_urls(url):
+    resp = requests.get(url, headers=random_header())
+    html = etree.HTML(resp.text)
+    links = html.xpath(".//ul[contains(@class,'videoList')]/li//a/@href")
+    for link in links:
+        video_list.append("https://cn.pornhub.com" + link)
+        print("解析出链接: https://cn.pornhub.com" + link)
+    # 下一页
+    nextPage = html.xpath(".//div[contains(@class,'page_next')]/a/@href")
+    if nextPage and nextPage[0] != '':
+        print("下一页:", "https://cn.pornhub.com" + nextPage[0])
+        parse_batch_urls("https://cn.pornhub.com" + nextPage[0])
+    else:
+        print("没有下一页,解析页面链接完成")
+
+
 if __name__ == '__main__':
     start_time = time.time()
-    if not os.path.exists(down_path):
-        os.makedirs(down_path)
-    print("读取存放目录为:", down_path)
+    if not os.path.exists(batch_down_path):
+        os.makedirs(batch_down_path)
+    print("读取存放目录为:", batch_down_path)
+
+    url_list = batch_url
+
     try:
         queue = Queue()
-        for x in range(len(download_urls)):
+        for x in range(len(url_list)):
             pornhub = Pornhub(queue)
             pornhub.daemon = True
             pornhub.start()
 
-        print("将要爬取的链接为:")
-        for url in download_urls:
-            print(url)
+        for url in url_list:
             queue.put(url)
 
         queue.join()
@@ -140,3 +164,4 @@ if __name__ == '__main__':
         end_time = time.time()
         d_time = end_time - start_time
         print("程序运行时间：%.8s s" % round(d_time, 2))
+        time.sleep(4)
