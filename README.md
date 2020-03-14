@@ -1,7 +1,7 @@
 # pornhub-downloader
 
 # 简介
-使用Python语言编写的，P站视频下载工具
+使用Python语言编写的，PornHub站视频下载工具
 
 技术点：requests re threading queue tqdm
 
@@ -24,8 +24,16 @@
 3.下载过程需要翻墙且为全局!!!
 
 # 运行截图
-![运行截图](img/1.png)
+![运行截图](img/test.png)
 
-# 交流方式
+
+
+# 联系方式
+需要批量下载的版本请加
+
+
 QQ: 1791592482 邮箱: 1791592482@qq.com
 
+# 捐助
+<img src="img/pay.jpg" width="200px" height="200px">
+<img src="img/pay2.jpg" width="200px" height="200px">
