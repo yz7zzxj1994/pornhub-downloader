@@ -22,7 +22,11 @@ class Pornhub(Thread):
         return resp.text
 
     def save_mp4(self, item, page_url):
-        if item["quality_1080p"]:
+        if item["quality_2160p"]:
+            url = item["quality_2160p"]
+        elif item["quality_1440p"]:
+            url = item["quality_1440p"]
+        elif item["quality_1080p"]:
             url = item["quality_1080p"]
         elif item["quality_720p"]:
             url = item["quality_720p"]
@@ -78,6 +82,15 @@ class Pornhub(Thread):
             item = {}
             item["video_title"] = re.findall('"video_title":"(.*?)",', html_str)[0].encode('utf-8').decode(
                 'unicode_escape')
+
+            item["quality_2160p"] = re.findall('"quality_2160p":"(.*?)",', html_str)
+            if item['quality_2160p']:
+                item["quality_2160p"] = item["quality_2160p"][0].replace('\\', '')
+
+            item["quality_1440p"] = re.findall('"quality_1440p":"(.*?)",', html_str)
+            if item['quality_1440p']:
+                item["quality_1440p"] = item["quality_1440p"][0].replace('\\', '')
+
             item["quality_1080p"] = re.findall('"quality_1080p":"(.*?)",', html_str)
             if item['quality_1080p']:
                 item["quality_1080p"] = item["quality_1080p"][0].replace('\\', '')
