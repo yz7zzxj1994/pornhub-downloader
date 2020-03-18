@@ -1,10 +1,3 @@
-# 福利
-免费领取一个月PornHub会员资格
-
-需要用意大利或阿里云香港IP去注册申请！
-
-活动地址：https://rt.pornhub.com/event/login?promo=free_italy&testing=active
-
 # pornhub-downloader
 
 # 简介
