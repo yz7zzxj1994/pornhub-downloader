@@ -37,3 +37,6 @@ QQ: 1791592482 邮箱: 1791592482@qq.com
 # 捐助
 <img src="img/pay.jpg" width="200px" height="300px">
 <img src="img/pay2.jpg" width="200px" height="300px">
+
+# 其他
+短信轰炸机: https://github.com/xilidexiao/sms_boom
