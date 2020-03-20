@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
+import random
 import re
 import time
 import requests
 from tqdm import tqdm
-from queue import Queue
 from retrying import retry
-from threading import Thread
-from config import random_header, download_urls, down_path
 
 
-class Pornhub(Thread):
-    def __init__(self, queue):
-        Thread.__init__(self)
-        self.queue = queue
+class Pornhub():
+    def __init__(self, url):
+        self.url = url
         self.rootpath = down_path + "/"
 
     @retry(stop_max_attempt_number=15)
@@ -22,11 +19,7 @@ class Pornhub(Thread):
         return resp.text
 
     def save_mp4(self, item, page_url):
-        if item["quality_2160p"]:
-            url = item["quality_2160p"]
-        elif item["quality_1440p"]:
-            url = item["quality_1440p"]
-        elif item["quality_1080p"]:
+        if item["quality_1080p"]:
             url = item["quality_1080p"]
         elif item["quality_720p"]:
             url = item["quality_720p"]
@@ -77,21 +70,13 @@ class Pornhub(Thread):
 
     def run(self):
         try:
-            url = self.queue.get()
+            url = self.url
             html_str = self.parse_html(url)
             item = {}
             item["video_title"] = re.findall('"video_title":"(.*?)",', html_str)[0].encode('utf-8').decode(
                 'unicode_escape')
 
             item["quality_2160p"] = re.findall('"quality_2160p":"(.*?)",', html_str)
-            if item['quality_2160p']:
-                item["quality_2160p"] = item["quality_2160p"][0].replace('\\', '')
-
-            item["quality_1440p"] = re.findall('"quality_1440p":"(.*?)",', html_str)
-            if item['quality_1440p']:
-                item["quality_1440p"] = item["quality_1440p"][0].replace('\\', '')
-
-            item["quality_1080p"] = re.findall('"quality_1080p":"(.*?)",', html_str)
             if item['quality_1080p']:
                 item["quality_1080p"] = item["quality_1080p"][0].replace('\\', '')
 
@@ -104,8 +89,28 @@ class Pornhub(Thread):
                 print("此视屏清晰度过低,忽略下载:", url)
         except Exception as e:
             print(e)
-        finally:
-            self.queue.task_done()
+
+
+download_urls = [
+    "https://cn.pornhub.com/view_video.php?viewkey=ph5e02113017593",
+    "https://cn.pornhub.com/view_video.php?viewkey=ph5ca9824ad0f90",
+    "https://cn.pornhub.com/view_video.php?viewkey=ph5e62cb456ca62"
+]
+
+down_path = "D:/ph/other"
+
+
+# 随机请求头
+# 使用前,填上你的账号cookie
+def random_header():
+    headers_list = [
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+        'Mozilla/5.0 (MeeGo; NokiaN9) AppleWebKit/534.13 (KHTML, like Gecko) NokiaBrowser/8.5.0 Mobile Safari/534.13',
+    ]
+    return {
+        'cookie': "ua=237aa6249591b6a7ad6962bc73492c77; platform_cookie_reset=pc; platform=pc; bs=kkfbi66h9zevjeq5bt27j0rvno182xdl; ss=205462885846193616; RNLBSERVERID=ded6699",
+        'user-agent': random.choice(headers_list)
+    }
 
 
 if __name__ == '__main__':
@@ -114,18 +119,12 @@ if __name__ == '__main__':
         os.makedirs(down_path)
     print("读取存放目录为:", down_path)
     try:
-        queue = Queue()
-        for x in range(len(download_urls)):
-            pornhub = Pornhub(queue)
-            pornhub.daemon = True
-            pornhub.start()
-
         print("将要爬取的链接为:")
         for url in download_urls:
             print(url)
-            queue.put(url)
-
-        queue.join()
+        for url in download_urls:
+            p = Pornhub(url)
+            p.run()
 
     except Exception as e:
         print("\n*" * 20)
