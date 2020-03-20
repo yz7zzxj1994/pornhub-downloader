@@ -20,7 +20,7 @@ cookie 默认使用空用户的cookie,可自行替换自己的账号cookie,作�
 # 联系方式
 需要**多线程批量下载**的版本请加
 
-QQ: 1791592482 邮箱: 1791592482@qq.com
+QQ: 1791592482
 
 # 捐助
 <img src="img/pay.jpg" width="200px" height="300px">
