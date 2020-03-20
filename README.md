@@ -18,6 +18,8 @@ cookie 默认使用空用户的cookie,可自行替换自己的账号cookie,作�
 
 
 # 联系方式
+<img src="img/1.png" width="240" height="84">
+
 需要**多线程批量下载**的版本请加
 
 QQ: 1791592482
