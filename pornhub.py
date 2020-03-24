@@ -4,7 +4,6 @@ import random
 import re
 import time
 import requests
-from tqdm import tqdm
 from retrying import retry
 
 
