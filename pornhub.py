@@ -18,55 +18,22 @@ class Pornhub():
         resp = requests.get(url, headers=random_header(), timeout=3)
         return resp.text
 
-    def save_mp4(self, item, page_url):
-        if item["quality_1080p"]:
-            url = item["quality_1080p"]
-        elif item["quality_720p"]:
+    def save_mp4(self, item):
+        if item["quality_720p"]:
             url = item["quality_720p"]
+        elif item["quality_480p"]:
+            url = item["quality_480p"]
         else:
             return 0
 
         file_path = self.rootpath + re.sub(r"[/\\:*?\"<>|]", "_", item["video_title"]) + ".mp4"
-        self.download_from_url(url, file_path, random_header(), 1048576, page_url)
+        self.download_from_url(url, file_path, random_header())
         return 1
 
-    @retry(stop_max_attempt_number=5)
-    def get_filesize(self, url, headers):
-        response = requests.get(url, headers=headers, stream=True, timeout=3)
-        file_size = int(response.headers['content-length'])
-        return file_size
-
     @retry(stop_max_attempt_number=9999)
-    def download(self, url, filepath, headers, chunk_size, file_size, page_url):
-        if os.path.exists(filepath):
-            first_byte = os.path.getsize(filepath)
-            print(
-                "视频存在,总大小:{}M,实际大小:{}M,继续下载...".format(round(file_size / 1024 / 1024), round(first_byte / 1024 / 1024)))
-        else:
-            first_byte = 0
-        if first_byte >= file_size:
-            print("文件已经下载,跳过此链接")
-            print("文件跳过,总大小:{}M,实际大小:{}M".format(round(file_size / 1024 / 1024), round(first_byte / 1024 / 1024)))
-            print("原链接:", page_url)
-            return file_size
-
-        headers["Range"] = f"bytes=%s-%s" % (first_byte, file_size)
-
-        pbar = tqdm(initial=first_byte, total=file_size, unit='B', unit_scale=True, desc=filepath)
-        req = requests.get(url, headers=headers, stream=True, timeout=3)
-        with(open(filepath, 'ab')) as f:
-            for chunk in req.iter_content(chunk_size):
-                if chunk:
-                    f.write(chunk)
-                    f.flush()
-                    pbar.update(chunk_size)
-        pbar.close()
-        print("下载完成:", page_url)
-        return file_size
-
-    def download_from_url(self, url, filepath, headers, chunk_size, page_url):
-        file_size = self.get_filesize(url, headers)
-        self.download(url, filepath, headers, chunk_size, file_size, page_url)
+    def download_from_url(self, url, filepath, headers):
+        with open(filepath,'wb') as f:
+            f.write(requests.get(url,headers).content)
 
     def run(self):
         try:
@@ -75,16 +42,14 @@ class Pornhub():
             item = {}
             item["video_title"] = re.findall('"video_title":"(.*?)",', html_str)[0].encode('utf-8').decode(
                 'unicode_escape')
-
-            item["quality_2160p"] = re.findall('"quality_2160p":"(.*?)",', html_str)
-            if item['quality_1080p']:
-                item["quality_1080p"] = item["quality_1080p"][0].replace('\\', '')
-
             item["quality_720p"] = re.findall('"quality_720p":"(.*?)",', html_str)
             if item['quality_720p']:
                 item["quality_720p"] = item["quality_720p"][0].replace('\\', '')
+            item["quality_480p"] = re.findall('"quality_480p":"(.*?)",', html_str)
+            if item['quality_480p']:
+                item["quality_480p"] = item["quality_480p"][0].replace('\\', '')
 
-            result = self.save_mp4(item, url)
+            result = self.save_mp4(item)
             if result == 0:
                 print("此视屏清晰度过低,忽略下载:", url)
         except Exception as e:
